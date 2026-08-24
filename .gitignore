@@ -1,0 +1,9 @@
+node_modules
+dist
+.DS_Store
+*.local
+.env
+.env.*
+
+# Local-only confidentiality check — names client terms, must never be committed
+check-leaks.sh
