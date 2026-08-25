@@ -121,14 +121,14 @@ export const certifications = [
     code: 'SAP',
     name: 'AWS Certified Solutions Architect – Professional',
     issuer: 'Amazon Web Services',
-    period: '', // >>> TODO <<< add issue year
+    period: '',
     tone: 'aws',
   },
   {
     code: 'SCS',
     name: 'AWS Certified Security – Specialty',
     issuer: 'Amazon Web Services',
-    period: '', // >>> TODO <<< add issue year
+    period: '',
     tone: 'aws',
   },
   {

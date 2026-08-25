@@ -7,8 +7,10 @@ export default function About() {
       <SectionHeading eyebrow={about.eyebrow} title={about.heading} />
 
       <Reveal>
-        <blockquote className="mb-12 border-l-2 border-accent-500/60 pl-6 text-xl leading-relaxed font-medium text-body italic sm:text-2xl">
-          &ldquo;{about.quote}&rdquo;
+        <blockquote className="mb-12 border-l-2 border-accent-500/60 pl-6 text-xl leading-relaxed font-medium sm:text-2xl">
+          <span className="bg-gradient-to-r from-accent-400 via-accent-300 to-cyan-glow bg-clip-text text-transparent">
+            &ldquo;{about.quote}&rdquo;
+          </span>
         </blockquote>
       </Reveal>
 
