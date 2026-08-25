@@ -49,9 +49,12 @@ const TECH_BADGES = [
 
 /* Each badge sits on a dashed orbit ring around the photo and actually
    travels around it: the outer layer spins continuously (animate-orbit)
-   while every badge counter-spins at the same speed (animate-orbit-reverse)
-   so the glyph itself stays upright as it orbits, rather than tumbling. */
-function OrbitBadge({ code, label, angle }) {
+   while every badge counter-spins at the same speed (animate-orbit-reverse-in)
+   so the glyph itself stays upright as it orbits, rather than tumbling. That
+   same class also runs a one-shot emerge animation on mount, staggered per
+   badge, so they scale/fade in from behind the photo instead of just
+   appearing. */
+function OrbitBadge({ code, label, angle, index }) {
   const Icon = ICONS[code];
   return (
     <div
@@ -61,7 +64,8 @@ function OrbitBadge({ code, label, angle }) {
       <span
         title={label}
         aria-label={label}
-        className="animate-orbit-reverse pointer-events-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-line-strong/80 bg-surface-2/90 shadow-lg shadow-black/50 backdrop-blur-sm sm:h-14 sm:w-14"
+        style={{ animationDelay: `${index * 70}ms` }}
+        className="animate-orbit-reverse-in pointer-events-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-line-strong/80 bg-surface-2/90 shadow-lg shadow-black/50 backdrop-blur-sm sm:h-14 sm:w-14"
       >
         <Icon size={30} color={BRAND_COLORS[code]} />
       </span>
@@ -161,8 +165,8 @@ function PhotoCard() {
       )}
 
       <div className="animate-orbit pointer-events-none absolute inset-0 hidden sm:block">
-        {TECH_BADGES.map((b) => (
-          <OrbitBadge key={b.code} {...b} />
+        {TECH_BADGES.map((b, i) => (
+          <OrbitBadge key={b.code} {...b} index={i} />
         ))}
       </div>
     </div>
@@ -221,7 +225,7 @@ export default function Hero() {
       </div>
 
       {/* ---------------- Stats strip ---------------- */}
-      <div className="mx-auto mt-16 grid max-w-7xl gap-4 px-5 sm:grid-cols-2 sm:px-8 lg:grid-cols-4">
+      <div className="mx-auto mt-16 grid max-w-7xl gap-4 px-5 sm:grid-cols-3 sm:px-8">
         {hero.stats.map((s) => (
           <div
             key={s.label}

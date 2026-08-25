@@ -64,9 +64,9 @@ export const hero = {
     { label: 'Years in IT & cloud', value: '14+', note: 'Infrastructure, virtualisation, and cloud architecture' },
     { label: 'Cloud platforms', value: '3', note: 'Microsoft Azure, AWS, and Google Cloud — hands-on across all three' },
     { label: 'Certifications', value: '4', note: 'AWS Professional & Specialty, VMware VCP, CNCF CKA' },
-    /* >>> TODO <<< Replace with a real, defensible number from your delivery
-       history — e.g. workloads migrated, or programmes delivered. */
-    { label: 'Workloads migrated', value: 'TODO', note: 'Servers and databases moved across migration programmes' },
+    /* >>> TODO <<< A fourth stat (e.g. workloads/programmes delivered) can go
+       here once you have a real, defensible number — see hero.stats grid in
+       Hero.jsx, which is already set up for 3 or 4 cards. */
   ],
 };
 
@@ -513,6 +513,39 @@ export const projects = [
       { label: 'Log sources', value: 'App + OS, fleet-wide' },
       { label: 'PII masking point', value: 'Agent, pre-index' },
       { label: 'DR mechanism', value: 'Cross-region replication + snapshots' },
+    ],
+    links: { repo: '', demo: '' },
+  },
+  {
+    id: 'aws-observability',
+    kind: 'capability',
+    category: 'Observability & Logging',
+    title: 'AWS-Native Observability — CloudWatch, X-Ray, and Managed Grafana',
+    summary:
+      'Unified metrics, logs, and distributed tracing for AWS-hosted workloads — CloudWatch as the metrics/log backbone, X-Ray for cross-service latency tracing, and Amazon Managed Grafana as the single dashboard surface, with alerting built on golden signals rather than per-metric thresholds.',
+    stack: [
+      'Amazon CloudWatch',
+      'CloudWatch Logs Insights',
+      'AWS X-Ray',
+      'Amazon Managed Service for Prometheus',
+      'Amazon Managed Grafana',
+      'Amazon SNS',
+      'Terraform',
+    ],
+    problem:
+      'Applies once workloads span more than a couple of AWS services: metrics, logs, and traces end up scattered across consoles with no correlation, alerting is ad hoc per team, and a latency spike has no clear path to "which hop caused it."',
+    solution: [
+      'Standardised custom application metrics on CloudWatch Embedded Metric Format so services emit structured metrics directly through their existing logs, without adding a separate metrics agent per service.',
+      'Instrumented service-to-service calls with X-Ray so a slow request shows its full latency breakdown across hops, replacing guesswork with an actual trace when triaging a regression.',
+      'Put Amazon Managed Grafana in front of both Amazon Managed Prometheus (infrastructure and container metrics) and CloudWatch (AWS-native service metrics), so on-call has one dashboard surface instead of switching consoles mid-incident.',
+      'Saved the most common CloudWatch Logs Insights queries as reusable runbook queries tied to specific incident patterns, rather than every on-call engineer re-deriving the same query at 3am.',
+      'Built alarms against golden signals — latency, traffic, errors, saturation — per service, routed through SNS with severity-based topics, replacing noisy single-metric threshold alarms that paged on the wrong things.',
+      'Set log retention and metric namespace policy deliberately per source rather than leaving CloudWatch defaults in place, since unmanaged retention is one of the most common silent cost leaks on AWS observability spend.',
+    ],
+    impact: [
+      { label: 'Tracing', value: 'X-Ray, cross-service' },
+      { label: 'Dashboards', value: 'Managed Grafana, unified' },
+      { label: 'Alerting', value: 'Golden-signal, SNS-routed' },
     ],
     links: { repo: '', demo: '' },
   },
