@@ -38,8 +38,8 @@ export default function Projects() {
               onClick={() => setCategory(c)}
               className={`rounded-lg border px-3.5 py-2 font-mono text-[11px] transition-colors ${
                 category === c
-                  ? 'border-emerald-500/50 bg-emerald-500/10 text-emerald-300'
-                  : 'border-slate-800 bg-slate-900/40 text-slate-400 hover:border-slate-700 hover:text-slate-200'
+                  ? 'border-accent-500/50 bg-accent-500/10 text-accent-300'
+                  : 'border-line bg-surface-raised/40 text-body hover:border-line-strong hover:text-heading'
               }`}
             >
               {c}
@@ -51,7 +51,7 @@ export default function Projects() {
           <svg
             viewBox="0 0 24 24"
             aria-hidden="true"
-            className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-slate-600"
+            className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-faint"
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
@@ -65,18 +65,18 @@ export default function Projects() {
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search stack, title, keyword..."
             aria-label="Search projects"
-            className="w-full rounded-lg border border-slate-800 bg-slate-900/50 py-2.5 pr-3 pl-9 font-mono text-xs text-slate-200 placeholder:text-slate-600 focus:border-emerald-500/50 focus:outline-none"
+            className="w-full rounded-lg border border-line bg-surface-raised/50 py-2.5 pr-3 pl-9 font-mono text-xs text-heading placeholder:text-faint focus:border-accent-500/50 focus:outline-none"
           />
         </div>
       </div>
 
-      <p className="mb-6 font-mono text-[11px] text-slate-600">
+      <p className="mb-6 font-mono text-[11px] text-faint">
         Showing {filtered.length} of {projects.length} {projects.length === 1 ? 'system' : 'systems'}
       </p>
 
       {filtered.length === 0 ? (
         <Panel className="p-12 text-center">
-          <p className="font-mono text-sm text-slate-500">No systems match that filter.</p>
+          <p className="font-mono text-sm text-muted">No systems match that filter.</p>
         </Panel>
       ) : (
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -101,20 +101,20 @@ function ProjectCard({ project, onOpen }) {
     <button
       type="button"
       onClick={onOpen}
-      className="group flex h-full w-full flex-col rounded-2xl border border-slate-800/80 bg-slate-950/60 p-5 text-left transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/40 hover:shadow-[0_0_40px_-20px_rgba(16,185,129,0.6)]"
+      className="group flex h-full w-full flex-col rounded-2xl border border-line/80 bg-panel-solid/60 p-5 text-left transition-all duration-300 hover:-translate-y-1 hover:border-accent-500/40 hover:shadow-[0_0_40px_-20px_rgba(16,185,129,0.6)]"
     >
       <div className="flex items-center justify-between gap-2">
-        <span className="font-mono text-[10px] tracking-[0.18em] text-emerald-400/80 uppercase">
+        <span className="font-mono text-[10px] tracking-[0.18em] text-accent-400/80 uppercase">
           {project.category}
         </span>
         <KindBadge kind={project.kind} />
       </div>
 
-      <h3 className="mt-3 text-lg leading-snug font-semibold text-slate-100 transition-colors group-hover:text-emerald-300">
+      <h3 className="mt-3 text-lg leading-snug font-semibold text-heading transition-colors group-hover:text-accent-300">
         {project.title}
       </h3>
 
-      <p className="mt-2.5 flex-1 text-[13px] leading-relaxed text-slate-400">{project.summary}</p>
+      <p className="mt-2.5 flex-1 text-[13px] leading-relaxed text-body">{project.summary}</p>
 
       <div className="mt-4 flex flex-wrap gap-1.5">
         {visible.map((s) => (
@@ -123,11 +123,11 @@ function ProjectCard({ project, onOpen }) {
         {overflow > 0 ? <Chip tone="accent">+{overflow} more</Chip> : null}
       </div>
 
-      <div className="mt-5 flex items-center justify-between border-t border-slate-800 pt-4">
-        <span className="font-mono text-[11px] text-emerald-400 transition-transform group-hover:translate-x-0.5">
+      <div className="mt-5 flex items-center justify-between border-t border-line pt-4">
+        <span className="font-mono text-[11px] text-accent-400 transition-transform group-hover:translate-x-0.5">
           View blueprint &rarr;
         </span>
-        <span className="font-mono text-[9px] tracking-wider text-slate-600 uppercase">
+        <span className="font-mono text-[9px] tracking-wider text-faint uppercase">
           {project.solution.length} steps
         </span>
       </div>
@@ -141,13 +141,13 @@ function ProjectCard({ project, onOpen }) {
 function KindBadge({ kind }) {
   if (kind === 'engagement') {
     return (
-      <span className="shrink-0 rounded-md border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 font-mono text-[9px] tracking-wider text-emerald-400 uppercase">
+      <span className="shrink-0 rounded-md border border-accent-500/40 bg-accent-500/10 px-2 py-0.5 font-mono text-[9px] tracking-wider text-accent-400 uppercase">
         Delivered
       </span>
     );
   }
   return (
-    <span className="shrink-0 rounded-md border border-slate-700 bg-slate-800/50 px-2 py-0.5 font-mono text-[9px] tracking-wider text-slate-400 uppercase">
+    <span className="shrink-0 rounded-md border border-line-strong bg-surface-2/50 px-2 py-0.5 font-mono text-[9px] tracking-wider text-body uppercase">
       Approach
     </span>
   );
@@ -172,28 +172,28 @@ function BlueprintModal({ project, onClose }) {
       role="dialog"
       aria-modal="true"
       aria-label={`${project.title} blueprint`}
-      className="fixed inset-0 z-[60] flex items-start justify-center overflow-y-auto bg-slate-950/85 p-4 backdrop-blur-sm sm:p-8"
+      className="fixed inset-0 z-[60] flex items-start justify-center overflow-y-auto bg-black/70 p-4 backdrop-blur-sm sm:p-8"
       onClick={onClose}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="animate-fade-up my-auto w-full max-w-3xl rounded-2xl border border-slate-800 bg-slate-950 shadow-2xl"
+        className="animate-fade-up my-auto w-full max-w-3xl rounded-2xl border border-line bg-panel-solid shadow-2xl"
       >
-        <div className="flex items-start justify-between gap-4 border-b border-slate-800 px-6 py-5">
+        <div className="flex items-start justify-between gap-4 border-b border-line px-6 py-5">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="font-mono text-[10px] tracking-[0.18em] text-emerald-400/80 uppercase">
+              <span className="font-mono text-[10px] tracking-[0.18em] text-accent-400/80 uppercase">
                 {project.category}
               </span>
               <KindBadge kind={project.kind} />
             </div>
-            <h3 className="mt-1.5 text-xl font-bold text-slate-50">{project.title}</h3>
+            <h3 className="mt-1.5 text-xl font-bold text-heading">{project.title}</h3>
           </div>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close blueprint"
-            className="shrink-0 rounded-lg border border-slate-800 p-2 text-slate-400 transition-colors hover:border-slate-700 hover:text-slate-100"
+            className="shrink-0 rounded-lg border border-line p-2 text-body transition-colors hover:border-line-strong hover:text-heading"
           >
             <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
@@ -203,21 +203,21 @@ function BlueprintModal({ project, onClose }) {
 
         <div className="space-y-7 px-6 py-6">
           <div>
-            <h4 className="mb-3 font-mono text-[11px] tracking-[0.2em] text-slate-500 uppercase">
+            <h4 className="mb-3 font-mono text-[11px] tracking-[0.2em] text-muted uppercase">
               {project.kind === 'engagement' ? 'Outcome' : 'Design targets'}
             </h4>
             <div className="grid gap-3 sm:grid-cols-3">
               {project.impact.map((m) => (
-                <div key={m.label} className="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
-                  <div className="text-base leading-snug font-bold text-emerald-400">{m.value}</div>
-                  <div className="mt-1 font-mono text-[10px] tracking-wide text-slate-500 uppercase">
+                <div key={m.label} className="rounded-xl border border-line bg-surface-raised/40 p-4">
+                  <div className="text-base leading-snug font-bold text-accent-400">{m.value}</div>
+                  <div className="mt-1 font-mono text-[10px] tracking-wide text-muted uppercase">
                     {m.label}
                   </div>
                 </div>
               ))}
             </div>
             {project.kind !== 'engagement' ? (
-              <p className="mt-3 font-mono text-[10px] leading-relaxed text-slate-600">
+              <p className="mt-3 font-mono text-[10px] leading-relaxed text-faint">
                 Reference targets from vendor guidance and industry practice — not figures from a
                 specific client engagement.
               </p>
@@ -225,14 +225,14 @@ function BlueprintModal({ project, onClose }) {
           </div>
 
           <Block title={project.kind === 'engagement' ? 'The problem' : 'When this applies'}>
-            <p className="text-[13px] leading-relaxed text-slate-400">{project.problem}</p>
+            <p className="text-[13px] leading-relaxed text-body">{project.problem}</p>
           </Block>
 
           <Block title={project.kind === 'engagement' ? 'How it works' : 'How it is delivered'}>
             <ul className="space-y-2.5">
               {project.solution.map((s, i) => (
-                <li key={i} className="flex gap-3 text-[13px] leading-relaxed text-slate-400">
-                  <span className="mt-0.5 font-mono text-[10px] text-emerald-400">
+                <li key={i} className="flex gap-3 text-[13px] leading-relaxed text-body">
+                  <span className="mt-0.5 font-mono text-[10px] text-accent-400">
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <span>{s}</span>
@@ -252,13 +252,13 @@ function BlueprintModal({ project, onClose }) {
           </Block>
 
           {project.links.repo || project.links.demo ? (
-            <div className="flex gap-3 border-t border-slate-800 pt-5">
+            <div className="flex gap-3 border-t border-line pt-5">
               {project.links.repo ? (
                 <a
                   href={project.links.repo}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="rounded-lg border border-slate-700 px-4 py-2 font-mono text-xs text-slate-200 hover:border-emerald-500/50 hover:text-emerald-400"
+                  className="rounded-lg border border-line-strong px-4 py-2 font-mono text-xs text-heading hover:border-accent-500/50 hover:text-accent-400"
                 >
                   Source ↗
                 </a>
@@ -268,7 +268,7 @@ function BlueprintModal({ project, onClose }) {
                   href={project.links.demo}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="rounded-lg bg-emerald-500 px-4 py-2 font-mono text-xs font-semibold text-slate-950 hover:bg-emerald-400"
+                  className="rounded-lg bg-accent-500 px-4 py-2 font-mono text-xs font-semibold text-slate-950 hover:bg-accent-400"
                 >
                   Live demo ↗
                 </a>
@@ -284,7 +284,7 @@ function BlueprintModal({ project, onClose }) {
 function Block({ title, children }) {
   return (
     <div>
-      <h4 className="mb-3 font-mono text-[11px] tracking-[0.2em] text-slate-500 uppercase">{title}</h4>
+      <h4 className="mb-3 font-mono text-[11px] tracking-[0.2em] text-muted uppercase">{title}</h4>
       {children}
     </div>
   );

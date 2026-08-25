@@ -1,26 +1,81 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
 
-  /* Ops-console palette */
-  --color-ink-950: #05070a;
-  --color-ink-900: #090d14;
-  --color-ink-850: #0d131c;
-  --color-ink-800: #121a25;
-  --color-ink-700: #1b2634;
-  --color-ink-600: #2a3746;
+  /* Semantic surface/text tokens — values come from :root / .dark below,
+     so every bg-surface / text-heading utility repaints automatically
+     when the theme toggle flips the .dark class on <html>. Dark values are
+     set to the exact hex the site already used, so dark mode is unchanged
+     pixel-for-pixel; only the :root (light) values are new. */
+  --color-surface: var(--t-surface);
+  --color-surface-raised: var(--t-surface-raised);
+  --color-surface-2: var(--t-surface-2);
+  --color-panel-solid: var(--t-panel-solid);
+  --color-line: var(--t-line);
+  --color-line-strong: var(--t-line-strong);
+  --color-heading: var(--t-heading);
+  --color-body: var(--t-body);
+  --color-muted: var(--t-muted);
+  --color-faint: var(--t-faint);
 
-  --color-accent-400: #34d399;
-  --color-accent-500: #10b981;
-  --color-accent-600: #059669;
-  --color-cyan-glow: #22d3ee;
+  --color-accent-300: var(--t-accent-300);
+  --color-accent-400: var(--t-accent-400);
+  --color-accent-500: var(--t-accent-500);
+  --color-accent-600: var(--t-accent-600);
+  --color-cyan-glow: var(--t-cyan);
   --color-danger: #f43f5e;
   --color-warn: #f59e0b;
 }
 
+/* -------- Light theme (default) -------- */
 :root {
+  --t-surface: #f8fafc;
+  --t-surface-raised: #ffffff;
+  --t-surface-2: #f1f5f9;
+  --t-panel-solid: #ffffff;
+  --t-line: #e2e8f0;
+  --t-line-strong: #cbd5e1;
+  --t-heading: #0f172a;
+  --t-body: #475569;
+  --t-muted: #64748b;
+  --t-faint: #94a3b8;
+  --t-accent-300: #10b981;
+  --t-accent-400: #059669;
+  --t-accent-500: #047857;
+  --t-accent-600: #065f46;
+  --t-cyan: #0e7490;
+  --t-grid-line: rgba(15, 23, 42, 0.06);
+  --t-scrollbar-track: #eef2f7;
+  --t-scrollbar-thumb: #cbd5e1;
+  --t-scrollbar-thumb-hover: #94a3b8;
+  color-scheme: light;
+}
+
+/* -------- Dark theme (the site's original look, unchanged) -------- */
+.dark {
+  --t-surface: #050505;
+  --t-surface-raised: #0f172a;
+  --t-surface-2: #1e293b;
+  --t-panel-solid: #020617;
+  --t-line: #1e293b;
+  --t-line-strong: #334155;
+  --t-heading: #f8fafc;
+  --t-body: #94a3b8;
+  --t-muted: #64748b;
+  --t-faint: #475569;
+  --t-accent-300: #6ee7b7;
+  --t-accent-400: #34d399;
+  --t-accent-500: #10b981;
+  --t-accent-600: #059669;
+  --t-cyan: #22d3ee;
+  --t-grid-line: rgba(148, 163, 184, 0.06);
+  --t-scrollbar-track: #090d14;
+  --t-scrollbar-thumb: #1e293b;
+  --t-scrollbar-thumb-hover: #334155;
   color-scheme: dark;
 }
 
@@ -30,11 +85,12 @@ html {
 }
 
 body {
-  background-color: #05070a;
-  color: #e2e8f0;
+  background-color: var(--t-surface);
+  color: var(--t-body);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* Faint engineering grid behind everything */
@@ -45,8 +101,8 @@ body {
   z-index: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(to right, rgba(148, 163, 184, 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+    linear-gradient(to right, var(--t-grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--t-grid-line) 1px, transparent 1px);
   background-size: 56px 56px;
   mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, #000 40%, transparent 100%);
 }
@@ -56,14 +112,14 @@ body {
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #090d14;
+  background: var(--t-scrollbar-track);
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: var(--t-scrollbar-thumb);
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: var(--t-scrollbar-thumb-hover);
 }
 
 @keyframes pulse-ring {
@@ -90,6 +146,13 @@ body {
   100% { transform: translateY(400%); }
 }
 .animate-scan { animation: scan 4s linear infinite; }
+
+@keyframes orbit-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-orbit { animation: orbit-spin 32s linear infinite; }
+.animate-orbit-reverse { animation: orbit-spin 32s linear infinite reverse; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

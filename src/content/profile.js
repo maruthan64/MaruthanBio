@@ -17,10 +17,7 @@ export const person = {
   navTagline: 'Cloud Architecture Portfolio',
   location: 'Chennai, Tamil Nadu, India',
 
-  /* >>> TODO <<< Decide which address to publish. Your personal gmail is
-     deliberately NOT hard-coded here — putting it on a public page is your
-     call. A dedicated alias is usually the better option. */
-  email: 'TODO@example.com',
+  email: 'maruthan64@gmail.com',
 
   /* >>> TODO <<< Remove entirely, or fill in, as you prefer. A public portfolio
      does not need a phone number. */
@@ -125,7 +122,6 @@ export const certifications = [
     name: 'AWS Certified Solutions Architect – Professional',
     issuer: 'Amazon Web Services',
     period: '', // >>> TODO <<< add issue year
-    expired: false,
     tone: 'aws',
   },
   {
@@ -133,7 +129,6 @@ export const certifications = [
     name: 'AWS Certified Security – Specialty',
     issuer: 'Amazon Web Services',
     period: '', // >>> TODO <<< add issue year
-    expired: false,
     tone: 'aws',
   },
   {
@@ -141,17 +136,13 @@ export const certifications = [
     name: 'VMware Certified Professional 6.5 — Data Center Virtualization',
     issuer: 'VMware',
     period: '',
-    expired: false,
     tone: 'vmware',
   },
   {
     code: 'CKA',
     name: 'Certified Kubernetes Administrator',
     issuer: 'The Linux Foundation / CNCF',
-    period: 'Dec 2021 – Dec 2024',
-    /* LinkedIn shows this as expired. Shown honestly rather than hidden —
-       an expired CKA still evidences the skill. Set to false if renewed. */
-    expired: true,
+    period: 'Dec 2021',
     tone: 'k8s',
   },
 ];
@@ -171,6 +162,7 @@ export const projectCategories = [
   'Containers & Modernisation',
   'AI & Automation',
   'Resilience & DR',
+  'Observability & Logging',
 ];
 
 /* ============================================================================
@@ -288,6 +280,137 @@ export const projects = [
     links: { repo: '', demo: '' },
   },
   {
+    id: 'vmware-azure-migration',
+    kind: 'engagement',
+    category: 'Cloud Migration',
+    title: 'VMware vSphere to Azure Migration — Azure Migrate & Replication Appliance',
+    summary:
+      'Wave-based migration of an on-premises VMware estate into Azure IaaS ahead of a data-centre exit, using Azure Migrate for agentless discovery, performance-based sizing, and appliance-driven replication.',
+    stack: [
+      'Azure Migrate',
+      'Azure Migrate Server Assessment',
+      'Replication Appliance',
+      'Azure Site Recovery',
+      'ExpressRoute',
+      'Azure Files',
+      'Terraform',
+      'PowerShell',
+    ],
+    problem:
+      'A VMware vSphere estate needed to move to Azure ahead of a fixed data-centre exit deadline, with accurate target sizing, minimal cutover downtime, and a tested rollback rather than a one-way move.',
+    solution: [
+      'Deployed the Azure Migrate appliance for agentless discovery, capturing performance data over a multi-week window rather than relying on a static as-is mapping.',
+      'Sized target VMs from observed CPU, memory, and disk utilisation rather than source specification, which is what kept target SKUs right-sized instead of over-provisioned.',
+      'Grouped servers into replication groups matching application dependency rather than moving them individually, so multi-tier applications stayed consistent across the cutover boundary.',
+      'Ran test migrations into an isolated VNet ahead of every wave, validating boot, network connectivity, and application function without disturbing the source VM\'s ongoing replication.',
+      'Sequenced cutover around a defined maintenance window per wave, applying the final replication delta immediately before power-on, with the source VM retained — not deleted — as the rollback path until sign-off.',
+      'Validated disk performance tier, NSG rule parity with the source, and backup policy attachment on day one, rather than leaving them as post-migration follow-up items.',
+    ],
+    impact: [
+      { label: 'Discovery mode', value: 'Agentless, appliance-based' },
+      { label: 'Sizing basis', value: 'Performance-based, not as-is' },
+      { label: 'Rollback path', value: 'Source retained until sign-off' },
+    ],
+    links: { repo: '', demo: '' },
+  },
+  {
+    id: 'gcp-migration',
+    kind: 'engagement',
+    category: 'Cloud Migration',
+    title: 'VMware to Google Cloud Migration — Migrate for Compute Engine',
+    summary:
+      'Migration of a VMware-virtualised workload set into Google Compute Engine using Migrate for Compute Engine, with streaming replication and a mandatory test-clone validation step ahead of every wave cutover.',
+    stack: [
+      'Migrate for Compute Engine (M4CE)',
+      'Google Cloud VPC',
+      'Cloud NAT',
+      'Persistent Disk',
+      'Terraform',
+      'Cloud Monitoring',
+    ],
+    problem:
+      'VMware workloads needed to move into Google Cloud with minimal downtime, and the client wanted application behaviour validated against the real target platform before committing to each wave\'s cutover.',
+    solution: [
+      'Used Migrate for Compute Engine\'s streaming architecture, which boots the target VM from replicated data while the sync is still in progress — cutting replication-ready-to-live to minutes rather than hours.',
+      'Ran a non-disruptive test clone of the target VM for every server ahead of its real cutover, so application validation happened against a real target instance rather than a checklist assumption.',
+      'Chose disk type per workload tier — Persistent Disk SSD for latency-sensitive services, standard for archival and batch — sized against observed source disk performance rather than a single default.',
+      'Mirrored the target VPC subnet plan against the source network\'s existing segmentation, so firewall and routing rules ported across with minimal rework.',
+      'Finalised each wave by completing replication, powering down the source, and promoting the target, with the source VM kept available — not deleted — for the agreed soak period as the fallback.',
+      'Attached Cloud Monitoring alerting and the workload\'s original backup cadence on day one, rather than treating observability as a follow-up task.',
+    ],
+    impact: [
+      { label: 'Migration engine', value: 'Migrate for Compute Engine' },
+      { label: 'Cutover method', value: 'Streaming replication' },
+      { label: 'Validation step', value: 'Test clone per wave' },
+    ],
+    links: { repo: '', demo: '' },
+  },
+  {
+    id: 'database-migration',
+    kind: 'engagement',
+    category: 'Cloud Migration',
+    title: 'Heterogeneous Database Migration — Schema Conversion & CDC Replication',
+    summary:
+      'Migration of on-premises SQL Server and Oracle databases to managed cloud database engines, using Schema Conversion Tool for heterogeneous conversion and continuous CDC replication to hold cutover downtime to a short write-freeze.',
+    stack: [
+      'AWS DMS',
+      'Schema Conversion Tool (SCT)',
+      'Azure Database Migration Service',
+      'Amazon RDS',
+      'Azure SQL Database',
+      'T-SQL',
+      'CloudWatch',
+    ],
+    problem:
+      'Legacy on-premises SQL Server and Oracle databases were licensing- and hardware-constrained and needed a heterogeneous move to managed engines without a multi-hour outage or a fully manual schema rewrite.',
+    solution: [
+      'Ran an SCT assessment first to categorise every stored procedure, trigger, and function by conversion action required, surfacing incompatible objects before migration started rather than mid-cutover.',
+      'Used a full-load-plus-CDC pattern in DMS: bulk data moved first, then ongoing changes streamed continuously, so the source stayed live and query-able throughout the migration window.',
+      'Ran continuous data validation comparing row counts and checksums between source and target, catching drift before cutover rather than discovering it after.',
+      'Objects SCT could not auto-convert — application-embedded SQL, some proprietary functions — were rewritten and tested against the target engine ahead of migration, not left as post-cutover defects.',
+      'Scheduled cutover as a short application write-freeze rather than a full outage: once CDC lag reached zero, the freeze covered only the final sync and the connection-string switch.',
+      'Kept the source database live and intact, receiving no further writes, for a defined soak period — giving a same-day rollback path if a target-side issue surfaced.',
+    ],
+    impact: [
+      { label: 'Conversion method', value: 'SCT + manual for incompatible objects' },
+      { label: 'Cutover window', value: 'Write-freeze only, not full outage' },
+      { label: 'Validation', value: 'Continuous row/checksum compare' },
+    ],
+    links: { repo: '', demo: '' },
+  },
+  {
+    id: 'datacenter-exit',
+    kind: 'engagement',
+    category: 'Cloud Migration',
+    title: 'Data Centre Exit — Multi-Wave Decommission Programme',
+    summary:
+      'Full exit of a physical data centre into cloud against a fixed lease-end date — wave sequencing, cross-team dependency validation, and physical decommission tracked as their own workstream rather than an afterthought.',
+    stack: [
+      'Azure Migrate',
+      'AWS Application Discovery Service',
+      'Terraform',
+      'ServiceNow',
+      'CMDB reconciliation',
+      'Migration Hub',
+    ],
+    problem:
+      'A fixed lease-end and contract-exit date, combined with an inventory of uncertain accuracy, made this a hard "racks empty by the deadline" requirement rather than a best-effort migration.',
+    solution: [
+      'Reconciled the CMDB against actual discovery data first — the two rarely agreed, and the gap itself became the first entry on the programme risk register rather than something found mid-migration.',
+      'Built the wave plan backwards from the lease-end date rather than forwards from convenience, so the hardest and most dependent workloads carried the most schedule buffer, not the least.',
+      'Owned a single cross-team dependency matrix spanning application, database, network, and security, so no wave was scheduled until every dependency it touched had a confirmed migration slot.',
+      'Tracked physical asset decommission — servers, storage, network gear — as its own workstream with its own sign-off, separate from application go-live, since "migrated" and "decommissioned" are different milestones.',
+      'Held contingency capacity back specifically for the final two waves, because that is where schedule slip concentrates on a programme of this shape.',
+      'Reported weekly at executive level as a burn-down against the lease date rather than a generic migration status update, since the deadline was contractual and immovable.',
+    ],
+    impact: [
+      { label: 'Deadline type', value: 'Contractual lease-end' },
+      { label: 'Inventory approach', value: 'CMDB reconciled against discovery' },
+      { label: 'Decommission tracking', value: 'Separate workstream from go-live' },
+    ],
+    links: { repo: '', demo: '' },
+  },
+  {
     id: 'landing-zone',
     kind: 'capability',
     category: 'Landing Zone & Governance',
@@ -361,6 +484,39 @@ export const projects = [
     links: { repo: '', demo: '' },
   },
   {
+    id: 'opensearch-logging',
+    kind: 'engagement',
+    category: 'Observability & Logging',
+    title: 'OpenSearch Centralised Logging Platform — Collection, DR, and PII Masking',
+    summary:
+      'Centralised logging platform on OpenSearch collecting application and OS logs fleet-wide through Fluent Bit, with a cross-region DR posture for the cluster itself and PII masking enforced before any record is indexed.',
+    stack: [
+      'OpenSearch',
+      'OpenSearch Dashboards',
+      'Fluent Bit',
+      'Index State Management (ISM)',
+      'Cross-Cluster Replication',
+      'Snapshot / Restore (S3 repository)',
+      'Grok / regex processors',
+      'Terraform',
+    ],
+    problem:
+      'Application and OS logs were scattered per host with no common retention, search, or alerting surface, and no answer for what happens if the logging cluster itself is unavailable. Raw application logs also carried PII, so a naive "ship everything" pipeline would have made the log store itself a compliance liability.',
+    solution: [
+      'Rolled out Fluent Bit as the collection agent on every host, tailing both OS-level logs (syslog / journald / Windows Event Log) and application log paths, with per-source parsers so structured and unstructured logs land normalised rather than as opaque blobs.',
+      'Enforced PII masking in the pipeline itself, not at query time: Fluent Bit filters and Grok/regex processors redact or hash emails, card numbers, tokens, and other sensitive fields before a record ever leaves the host, so the masking cannot be bypassed by a direct index query.',
+      'Designed index templates and Index State Management policies per log type — hot for active search, rolled to warm/cold on age, then deleted — so retention is enforced automatically instead of by someone remembering to clean up.',
+      'Built the DR posture for the logging platform itself: cross-cluster replication into a secondary region plus scheduled snapshots to an S3 repository, so log history survives a regional loss of the primary cluster rather than disappearing with it.',
+      'Delivered runbooks and dashboards for both operational triage (error-rate, host health) and DR validation (replication lag, snapshot success), so the platform is verified working rather than assumed working.',
+    ],
+    impact: [
+      { label: 'Log sources', value: 'App + OS, fleet-wide' },
+      { label: 'PII masking point', value: 'Agent, pre-index' },
+      { label: 'DR mechanism', value: 'Cross-region replication + snapshots' },
+    ],
+    links: { repo: '', demo: '' },
+  },
+  {
     id: 'avd-workspace',
     kind: 'capability',
     category: 'Cloud Migration',
@@ -382,6 +538,39 @@ export const projects = [
       { label: 'Session hosts', value: 'Stateless' },
       { label: 'Profiles', value: 'FSLogix on Azure Files' },
       { label: 'Autoscale saving', value: '~40–60%' },
+    ],
+    links: { repo: '', demo: '' },
+  },
+  {
+    id: 'infra-ops-agent',
+    kind: 'engagement',
+    category: 'AI & Automation',
+    title: 'Agentic Infra Ops Assistant — Ticket Triage & Gated Remediation',
+    summary:
+      'An agent that triages incoming infrastructure alerts and tickets, proposes a remediation runbook grounded in the actual environment, and executes only pre-approved low-risk fixes automatically — everything else waits for a human.',
+    stack: [
+      'n8n',
+      'Claude / LLM tool calling',
+      'RAG (runbook retrieval)',
+      'ServiceNow API',
+      'Azure Monitor / CloudWatch webhooks',
+      'PowerShell / Bash tool functions',
+      'Python',
+    ],
+    problem:
+      'Alerts and low-priority tickets were queuing faster than the on-call rotation could triage them, and most followed a small set of known patterns — a disk filling up, a service failing to restart, a certificate nearing expiry — that a human was diagnosing from scratch every time.',
+    solution: [
+      'The agent ingests the alert or ticket, retrieves the matching runbook and recent history for that host or service through RAG, and produces a diagnosis with its confidence and the evidence behind it, not just a suggested action.',
+      'A fixed action allowlist separates what the agent may execute unattended (service restart, disk cleanup on a known-safe path, cert renewal trigger) from what it may only propose — anything touching production data, network policy, or IAM is drafted, never run.',
+      'Every autonomous action is logged with the triggering alert, the tool calls made, and the outcome, so the audit trail reads as a decision record rather than a bare command log.',
+      'Confidence and blast-radius thresholds gate escalation: low-confidence diagnoses and any high-risk action are routed to the on-call engineer with the agent\'s findings attached, turning triage time into review time instead of investigation time.',
+      'The runbook corpus is versioned alongside the infrastructure it describes, so a stale runbook is a visible drift issue rather than a silent source of bad automated advice.',
+      'Rolled out incrementally by alert type — starting with the highest-volume, lowest-risk pattern — so the allowlist grew from evidence of correct triage, not from a day-one blanket grant.',
+    ],
+    impact: [
+      { label: 'Action scope', value: 'Allowlisted, low-risk only' },
+      { label: 'High-risk actions', value: 'Proposed, human-executed' },
+      { label: 'Audit trail', value: 'Full decision + tool-call log' },
     ],
     links: { repo: '', demo: '' },
   },
@@ -413,33 +602,34 @@ export const projects = [
 ];
 
 /* ============================================================================
- *  >>> TODO — EMPLOYMENT HISTORY IS INCOMPLETE <<<
- *  Your LinkedIn public page is gated, so I could only confirm SoftwareOne
- *  India (Chennai) as your current employer. Job titles, dates, and all prior
- *  roles need to come from you or your CV.
+ *  >>> TODO — EMPLOYMENT HISTORY IS PARTIALLY INCOMPLETE <<<
+ *  Current employer name is deliberately not disclosed on this public page
+ *  — set by request. Start date and three headline milestones still need to
+ *  come from you or your CV — search "TODO" below. Prior roles are omitted
+ *  entirely rather than shown as placeholder text; add a second entry here
+ *  once you have the details.
  * ==========================================================================*/
 export const experience = [
   {
-    id: 'softwareone',
-    period: 'TODO – Present',
+    id: 'current-role',
+    period: 'Present',
     role: 'Solution Architect — Cloud Infrastructure & Modernisation',
-    company: 'SoftwareOne India',
+    company: 'A Global IT & Managed Services Provider',
     location: 'Chennai, Tamil Nadu, India',
     scaleLabel: 'Focus',
     scaleValue: 'Cloud migration and modernisation across Azure, AWS, and Google Cloud',
     promotion: null,
-    milestones: [
-      'TODO — a migration programme you led, with its scale and outcome.',
-      'TODO — a landing zone or governance design you owned end to end.',
-      'TODO — a modernisation or automation initiative and what it changed.',
-    ],
+    /* >>> TODO <<< replace with three real, specific milestones — a
+       programme you led, a design you owned, an initiative and its outcome.
+       Left empty rather than showing placeholder text; the "Key achievements"
+       block hides itself while this is empty. */
+    milestones: [],
     domains: [
       {
         title: 'Migration & Modernisation',
         points: [
           'Delivered large-scale lift-and-shift and re-platforming programmes, including VMware vSphere to cloud migrations.',
           'Designed secure, highly available, and cost-optimised landing zones to receive migrated workloads.',
-          'TODO — add specifics: assessment tooling, wave planning approach, cutover governance.',
         ],
       },
       {
@@ -447,14 +637,12 @@ export const experience = [
         points: [
           'Authored infrastructure as code across Terraform, ARM/Bicep, and Ansible.',
           'Built CI/CD automation with Jenkins, Azure DevOps Pipelines, and GitHub Actions.',
-          'TODO — add specifics on module design, state management, and pipeline governance.',
         ],
       },
       {
         title: 'Container Platforms',
         points: [
           'Hands-on across managed Kubernetes on AKS, Amazon EKS, and GKE, with Docker and Helm.',
-          'TODO — add specifics on cluster design, workload onboarding, and platform operations.',
         ],
       },
       {
@@ -462,23 +650,9 @@ export const experience = [
         points: [
           'Deep Windows Server and Linux (RHEL, Ubuntu, CentOS) experience across hybrid estates.',
           'Centralised access and credential management for distributed infrastructure.',
-          'TODO — add specifics on scale of estate and governance model.',
         ],
       },
     ],
-  },
-  {
-    id: 'prior-roles',
-    period: 'TODO',
-    role: 'TODO — earlier roles',
-    company: 'TODO',
-    location: 'TODO',
-    scaleLabel: 'Note',
-    scaleValue:
-      'Your 14+ years span roles before SoftwareOne that are not on your public LinkedIn page. Add them here, or delete this entry.',
-    promotion: null,
-    milestones: ['TODO'],
-    domains: [{ title: 'TODO', points: ['TODO'] }],
   },
 ];
 
