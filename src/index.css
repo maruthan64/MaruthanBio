@@ -55,27 +55,28 @@
   color-scheme: light;
 }
 
-/* -------- Dark theme (the site's original look, unchanged) -------- */
+/* -------- Dark theme: warm near-black neutrals (Concept B), accent
+   untouched — emerald/cyan stay exactly as before. -------- */
 .dark {
-  --t-surface: #050505;
-  --t-surface-raised: #0f172a;
-  --t-surface-2: #1e293b;
-  --t-panel-solid: #020617;
-  --t-line: #1e293b;
-  --t-line-strong: #334155;
-  --t-heading: #f8fafc;
-  --t-body: #94a3b8;
-  --t-muted: #64748b;
-  --t-faint: #475569;
+  --t-surface: #141210;
+  --t-surface-raised: #1c1917;
+  --t-surface-2: #292521;
+  --t-panel-solid: #0f0d0b;
+  --t-line: #2e2a25;
+  --t-line-strong: #433d35;
+  --t-heading: #f5f2ea;
+  --t-body: #a39c8e;
+  --t-muted: #8a8378;
+  --t-faint: #6b6560;
   --t-accent-300: #6ee7b7;
   --t-accent-400: #34d399;
   --t-accent-500: #10b981;
   --t-accent-600: #059669;
   --t-cyan: #22d3ee;
-  --t-grid-line: rgba(148, 163, 184, 0.06);
-  --t-scrollbar-track: #090d14;
-  --t-scrollbar-thumb: #1e293b;
-  --t-scrollbar-thumb-hover: #334155;
+  --t-grid-line: rgba(163, 156, 142, 0.06);
+  --t-scrollbar-track: #0f0d0b;
+  --t-scrollbar-thumb: #2e2a25;
+  --t-scrollbar-thumb-hover: #433d35;
   color-scheme: dark;
 }
 
