@@ -23,7 +23,8 @@ export const person = {
      does not need a phone number. */
   phoneMasked: '',
 
-  availability: 'Open to Solution Architect and Cloud Migration leadership engagements',
+  availability:
+    'Open to Solution Architect and Cloud Migration leadership engagements, technical training delivery, and AI automation initiatives',
   socials: {
     github: 'https://github.com/maruthan64',
     linkedin: 'https://www.linkedin.com/in/maruthanayyavu/',
